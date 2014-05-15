@@ -1,0 +1,24 @@
+{
+  "name": "excel-stream",
+  "description": "",
+  "version": "0.0.0",
+  "homepage": "https://github.com/dominictarr/excel-stream",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/dominictarr/excel-stream.git"
+  },
+  "dependencies": {
+    "through": "~2.3.4",
+    "duplexer": "~0.1.1",
+    "JSONStream": "~0.8.2",
+    "csv-stream": "~0.1.3",
+    "osenv": "~0.0.3",
+    "j": "~0.2.20"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "set -e; for t in test/*.js; do node $t; done"
+  },
+  "author": "Dominic Tarr <dominic.tarr@gmail.com> (http://dominictarr.com)",
+  "license": "MIT"
+}
