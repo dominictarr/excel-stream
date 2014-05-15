@@ -19,9 +19,12 @@ module.exports = function () {
       var child = spawn(require.resolve('j/bin/j.njs'), [filename])
       child.stdout.pipe(csv.createStream())
         .pipe(through(function (data) {
-          for(var k in data)
-            if(!k) delete data[k]
-          this.queue(data)
+          var _data = {}
+          for(var k in data) {
+            var value = data[k].trim()
+            _data[k.trim()] = isNaN(value) ? value : +value
+          }
+          this.queue(_data)
         }))
         .pipe(read)
     })
