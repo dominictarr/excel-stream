@@ -36,9 +36,12 @@ module.exports = function () {
 
 if(!module.parent) {
   var JSONStream = require('JSONStream')
-
+  var args = require('minimist')(process.argv.slice(2))
   process.stdin
     .pipe(module.exports())
-    .pipe(JSONStream.stringify())
+    .pipe(args.lines || args.newlines
+      ? JSONStream.stringify('', '\n', '\n', 0)
+      : JSONStream.stringify()
+    )
     .pipe(process.stdout)
 }
