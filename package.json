@@ -1,7 +1,7 @@
 {
   "name": "excel-stream",
   "description": "convert a stream of xls or xlsx into json on the command line or in node",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "bin": "index.js",
   "homepage": "https://github.com/dominictarr/excel-stream",
   "repository": {
@@ -15,7 +15,8 @@
     "j": "~0.2.20",
     "minimist": "^0.2.0",
     "osenv": "~0.0.3",
-    "through": "~2.3.4"
+    "through": "~2.3.4",
+    "win-spawn": "^2.0.0"
   },
   "devDependencies": {},
   "scripts": {
