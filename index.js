@@ -3,14 +3,14 @@
 var fs       = require('fs')
 var os       = require('os')
 var path     = require('path')
-var child    = require('child_process')
+var chpro    = require('child_process')
 
 var through  = require('through')
 var csv      = require('csv-stream')
 var osenv    = require('osenv')
 var duplexer = require('duplexer')
 
-var spawn = child.spawn
+var spawn = chpro.spawn
 if (os.type() === 'Windows_NT') spawn = require('win-spawn')
 
 module.exports = function () {
