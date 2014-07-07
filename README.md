@@ -21,6 +21,14 @@ npm install -g excel-stream
 excel-stream < accounts.xlsx > account.json
 ```
 
+# options
+
+newline delimited json:
+
+```js
+excel-stream --newlines
+```
+
 # formats
 
 each row becomes a javascript object, so input like
