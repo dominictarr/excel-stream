@@ -13,7 +13,7 @@ var duplexer = require('duplexer')
 var spawn = chpro.spawn
 if (os.type() === 'Windows_NT') spawn = require('win-spawn')
 
-module.exports = function () {
+module.exports = function (options) {
 
   var read = through()
 
@@ -21,7 +21,7 @@ module.exports = function () {
   var write = fs.createWriteStream(filename)
     .on('close', function () {
       var child = spawn(require.resolve('j/bin/j.njs'), [filename])
-      child.stdout.pipe(csv.createStream())
+      child.stdout.pipe(csv.createStream(options))
         .pipe(through(function (data) {
           var _data = {}
           for(var k in data) {
