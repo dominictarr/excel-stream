@@ -9,6 +9,7 @@ var through  = require('through')
 var csv      = require('csv-stream')
 var osenv    = require('osenv')
 var duplexer = require('duplexer')
+var concat   = require('concat-stream')
 
 var spawn = chpro.spawn
 if (os.type() === 'Windows_NT') spawn = require('win-spawn')
@@ -16,6 +17,7 @@ if (os.type() === 'Windows_NT') spawn = require('win-spawn')
 module.exports = function (options) {
 
   var read = through()
+  var duplex
 
   var filename = path.join(osenv.tmpdir(), '_'+Date.now())
   var write = fs.createWriteStream(filename)
@@ -31,9 +33,16 @@ module.exports = function (options) {
           this.queue(_data)
         }))
         .pipe(read)
+      child.on('exit', function(code, sig) {
+        if(code === null || code !== 0) {
+          child.stderr.pipe(concat(function(errstr) {
+            duplex.emit('error', new Error(errstr))
+          }))
+        }
+      })
     })
 
-  return duplexer(write, read)
+  return (duplex = duplexer(write, read))
 
 }
 
