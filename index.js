@@ -1,54 +1,34 @@
 #!/usr/bin/env node
 
-var fs       = require('fs')
-var os       = require('os')
-var path     = require('path')
-var chpro    = require('child_process')
-
-var through  = require('through')
-var csv      = require('csv-stream')
-var osenv    = require('osenv')
-var duplexer = require('duplexer')
-var concat   = require('concat-stream')
+var fs         = require('fs')
+var os         = require('os')
+var path       = require('path')
+var chpro      = require('child_process')
+var duplexer   = require('duplexer')
+var concat     = require('concat-stream')
+var JSONStream = require('JSONStream')
 
 var spawn = chpro.spawn
 if (os.type() === 'Windows_NT') spawn = require('win-spawn')
 
 module.exports = function (options) {
+  var child = spawn(require.resolve('j/bin/j.njs'), ['-J', '-'])
+  var read = child.stdout.pipe(JSONStream.parse('*'))
 
-  var read = through()
-  var duplex
+  child.on('exit', function(code, sig) {
+    if(code === null || code !== 0) {
+      child.stderr.pipe(concat(function(errstr) {
+        duplex.emit('error', new Error(errstr))
+      }))
+    }
+  })
 
-  var filename = path.join(osenv.tmpdir(), '_'+Date.now())
-  var write = fs.createWriteStream(filename)
-    .on('close', function () {
-      var child = spawn(require.resolve('j/bin/j.njs'), [filename])
-      child.stdout.pipe(csv.createStream(options))
-        .pipe(through(function (data) {
-          var _data = {}
-          for(var k in data) {
-            var value = data[k].trim()
-            _data[k.trim()] = isNaN(value) ? value : +value
-          }
-          this.queue(_data)
-        }))
-        .pipe(read)
-      child.on('exit', function(code, sig) {
-        if(code === null || code !== 0) {
-          child.stderr.pipe(concat(function(errstr) {
-            duplex.emit('error', new Error(errstr))
-          }))
-        }
-      })
-    })
-
-  return (duplex = duplexer(write, read))
-
+  var duplex = duplexer(child.stdin, read)
+  return duplex
 }
 
 
-if(!module.parent) {
-  var JSONStream = require('JSONStream')
+if (!module.parent) {
   var args = require('minimist')(process.argv.slice(2))
   process.stdin
     .pipe(module.exports())
