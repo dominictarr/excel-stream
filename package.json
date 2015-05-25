@@ -16,9 +16,11 @@
     "minimist": "~1.1.1",
     "win-spawn": "^2.0.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "tape": "~4.0.0"
+  },
   "scripts": {
-    "test": "set -e; for t in test/*.js; do node $t; done"
+    "test": "tape test.js"
   },
   "author": "Dominic Tarr <dominic.tarr@gmail.com> (http://dominictarr.com)",
   "license": "MIT"
