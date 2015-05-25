@@ -9,11 +9,11 @@
     "url": "git://github.com/dominictarr/excel-stream.git"
   },
   "dependencies": {
-    "JSONStream": "~0.8.2",
+    "JSONStream": "~1.0.4",
     "concat-stream": "^1.4.6",
     "duplexer": "~0.1.1",
-    "j": "^0.3.8",
-    "minimist": "^0.2.0",
+    "j": "~0.4.3",
+    "minimist": "~1.1.1",
     "win-spawn": "^2.0.0"
   },
   "devDependencies": {},
