@@ -20,9 +20,19 @@ module.exports = function (options) {
   var duplex
 
   var filename = path.join(osenv.tmpdir(), '_'+Date.now())
+
+  var spawnArgs = []
+
+  if (options) {
+    options.sheet && spawnArgs.push('--sheet') && spawnArgs.push(options.sheet) && delete options.sheet
+    options.sheetIndex && spawnArgs.push('--sheet-index') && spawnArgs.push(options.sheetIndex) && delete options.sheetIndex
+  }
+
+  spawnArgs.push(filename)
+
   var write = fs.createWriteStream(filename)
     .on('close', function () {
-      var child = spawn(require.resolve('j/bin/j.njs'), [filename])
+      var child = spawn(require.resolve('j/bin/j.njs'), spawnArgs)
       child.stdout.pipe(csv.createStream(options))
         .pipe(through(function (data) {
           var _data = {}
