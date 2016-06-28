@@ -6,7 +6,7 @@ var path     = require('path')
 var chpro    = require('child_process')
 
 var through  = require('through')
-var csv      = require('csv-stream')
+var csv = require('fast-csv')
 var osenv    = require('osenv')
 var duplexer = require('duplexer')
 var concat   = require('concat-stream')
@@ -33,12 +33,12 @@ module.exports = function (options) {
   var write = fs.createWriteStream(filename)
     .on('close', function () {
       var child = spawn(require.resolve('j/bin/j.njs'), spawnArgs)
-      child.stdout.pipe(csv.createStream(options))
+      child.stdout.pipe(csv(options))
         .pipe(through(function (data) {
           var _data = {}
           for(var k in data) {
             var value = data[k].trim()
-            _data[k.trim()] = isNaN(value) ? value : +value
+            _data[k.trim()] = (isNaN(value) || value === '') ? value : +value;
           }
           this.queue(_data)
         }))
