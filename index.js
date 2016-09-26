@@ -7,9 +7,10 @@ var chpro    = require('child_process')
 
 var through  = require('through')
 var csv      = require('csv-stream')
-var osenv    = require('osenv')
 var duplexer = require('duplexer')
 var concat   = require('concat-stream')
+
+var tmp      = require('tmp')
 
 var spawn = chpro.spawn
 if (os.type() === 'Windows_NT') spawn = require('win-spawn')
@@ -19,7 +20,7 @@ module.exports = function (options) {
   var read = through()
   var duplex
 
-  var filename = path.join(osenv.tmpdir(), '_'+Date.now())
+  var filename = tmp.tmpNameSync()
 
   var spawnArgs = []
 
