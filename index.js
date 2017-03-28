@@ -1,25 +1,22 @@
 #!/usr/bin/env node
 
 var fs       = require('fs')
-var os       = require('os')
-var path     = require('path')
 var chpro    = require('child_process')
 
 var through  = require('through')
 var csv = require('fast-csv')
-var osenv    = require('osenv')
+var tmp      = require('tmp')
 var duplexer = require('duplexer')
 var concat   = require('concat-stream')
 
 var spawn = chpro.spawn
-if (os.type() === 'Windows_NT') spawn = require('win-spawn')
 
 module.exports = function (options) {
 
   var read = through()
   var duplex
 
-  var filename = path.join(osenv.tmpdir(), '_'+Date.now())
+  var file = tmp.fileSync({postfix: '.xlsx'})
 
   var spawnArgs = []
 
@@ -28,9 +25,9 @@ module.exports = function (options) {
     options.sheetIndex && spawnArgs.push('--sheet-index') && spawnArgs.push(options.sheetIndex) && delete options.sheetIndex
   }
 
-  spawnArgs.push(filename)
+  spawnArgs.push(file.name)
 
-  var write = fs.createWriteStream(filename)
+  var write = fs.createWriteStream(file.name)
     .on('close', function () {
       var child = spawn(require.resolve('j/bin/j.njs'), spawnArgs)
       child.stdout.pipe(csv(options))
