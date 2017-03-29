@@ -39,7 +39,7 @@ module.exports = function (options) {
           var _data = {}
           for(var k in data) {
             var value = data[k].trim()
-            _data[k.trim()] = _.isNumber(value) ? _.toNumber(value) : value;
+            _data[k.trim()] = (isNaN(value) || _.isEmpty(value)) ? value : _.toNumber(value);
           }
           this.queue(_data)
         }))
