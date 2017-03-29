@@ -15,9 +15,6 @@
     "fast-csv": "^2.0.0",
     "j": "^0.4.3",
     "lodash": "^4.17.4",
-    "lodash.isnumber": "^3.0.3",
-    "lodash.tonumber": "^4.0.3",
-    "lodash.union": "^4.6.0",
     "minimist": "^1.1.1",
     "through": "~2.3.4",
     "tmp": "0.0.31"
