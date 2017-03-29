@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-
+var _        = require('lodash') // Just use lodash omg!
 var fs       = require('fs')
 var chpro    = require('child_process')
 
@@ -32,10 +32,14 @@ module.exports = function (options) {
       var child = spawn(require.resolve('j/bin/j.njs'), spawnArgs)
       child.stdout.pipe(csv(options))
         .pipe(through(function (data) {
+          var empty = _(data).values().union().filter(Boolean).isEmpty()
+
+          if (empty) return // Skip empty rows please
+
           var _data = {}
           for(var k in data) {
             var value = data[k].trim()
-            _data[k.trim()] = (isNaN(value) || value === '') ? value : +value;
+            _data[k.trim()] = _.isNumber(value) ? _.toNumber(value) : value;
           }
           this.queue(_data)
         }))
