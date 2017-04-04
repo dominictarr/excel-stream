@@ -45,6 +45,8 @@ module.exports = function (options) {
         }))
         .pipe(read)
       child.on('exit', function(code, sig) {
+        // Ensure explicit removal of temp file
+        if(file) file.removeCallback()
         if(code === null || code !== 0) {
           child.stderr.pipe(concat(function(errstr) {
             duplex.emit('error', new Error(errstr))
