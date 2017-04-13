@@ -4,7 +4,7 @@ var fs       = require('fs')
 var chpro    = require('child_process')
 
 var through  = require('through')
-var csv = require('fast-csv')
+var csv      = require('fast-csv')
 var tmp      = require('tmp')
 var duplexer = require('duplexer')
 var concat   = require('concat-stream')
@@ -36,11 +36,16 @@ module.exports = function (options) {
 
           if (empty) return // Skip empty rows please
 
-          var _data = {}
-          for(var k in data) {
-            var value = data[k].trim()
-            _data[k.trim()] = (isNaN(value) || _.isEmpty(value)) ? value : _.toNumber(value);
-          }
+          var mapper = _.isPlainObject(data) ? 'mapValues' : 'map'
+
+          // Adds support for being given arrays vs objects which happens
+          // when options.headers = true/false
+          var _data = _(data)
+            [mapper](_.trim)
+            [mapper](function(value) {
+              return (isNaN(value) || _.isEmpty(value)) ? value : _.toNumber(value)
+            }).value()
+
           this.queue(_data)
         }))
         .pipe(read)
@@ -58,7 +63,6 @@ module.exports = function (options) {
   return (duplex = duplexer(write, read))
 
 }
-
 
 if(!module.parent) {
   var JSONStream = require('JSONStream')
