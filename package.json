@@ -11,7 +11,7 @@
   "dependencies": {
     "JSONStream": "^1.0.4",
     "concat-stream": "^1.4.6",
-    "csv-stream": "~0.1.3",
+    "csv-stream": "0.2.0",
     "duplexer": "~0.1.1",
     "j": "^0.4.3",
     "minimist": "^1.1.1",
