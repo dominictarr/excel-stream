@@ -1,7 +1,7 @@
 {
   "name": "excel-stream",
   "description": "convert a stream of xls or xlsx into json on the command line or in node",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "bin": "index.js",
   "homepage": "https://github.com/dominictarr/excel-stream",
   "repository": {
@@ -12,16 +12,20 @@
     "JSONStream": "^1.0.4",
     "concat-stream": "^1.4.6",
     "duplexer": "~0.1.1",
-    "fast-csv": "^2.0.0",
+    "fast-csv": "^4.3.6",
     "j": "^0.4.3",
     "lodash": "^4.17.4",
     "minimist": "^1.1.1",
     "through": "~2.3.4",
     "tmp": "0.0.31"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "chai": "^4.3.6",
+    "memorystream": "^0.3.1",
+    "mocha": "^10.0.0"
+  },
   "scripts": {
-    "test": "set -e; for t in test/*.js; do node $t; done"
+    "test": "mocha test/index.js"
   },
   "author": "Dominic Tarr <dominic.tarr@gmail.com> (http://dominictarr.com)",
   "license": "MIT"

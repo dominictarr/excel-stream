@@ -30,7 +30,7 @@ module.exports = function (options) {
   var write = fs.createWriteStream(file.name)
     .on('close', function () {
       var child = spawn(require.resolve('j/bin/j.njs'), spawnArgs)
-      child.stdout.pipe(csv(options))
+      child.stdout.pipe(csv.parse(options))
         .pipe(through(function (data) {
           var empty = _(data).values().union().filter(Boolean).isEmpty()
 
